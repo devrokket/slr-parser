@@ -1,14 +1,14 @@
 # import requirements
 import sys, json
 import traceback
+from anytree import Node, RenderTree
 
-# 명령줄 인수 파싱
+# command parsing
 if len(sys.argv) != 2:
 	print('사용 방법 : python slr_parser.py <input_file>\n')
 	sys.exit(1)
 
-
-# 전역 변수
+# global variables
 txt_path = './' + sys.argv[1]
 table_path = './' + "table.json"
 
@@ -52,7 +52,7 @@ remove = {
 	34: ["RETURN", "return RHS semi"],
 }
 
-# 파일 읽기
+# file reading
 def read_file():
 	global parsing_table
 
@@ -75,17 +75,20 @@ def read_file():
 	return token_arr
 
 
-# parsing 로직
+# parsing logic
 def parse(token_arr):
 	stack = []
 	token_idx = -1
+
+	# tree stack
+	tree_stack = []
 
 	stack.append(0)
 	while(1):
 		token = token_arr[token_idx + 1]
 		#print(f'stack : {stack}, token : {token}\n')
 
-		# key error 발생 가능
+		# key error
 		table_result = parsing_table[stack[-1]][token]
 
 		if table_result == None:
@@ -95,26 +98,38 @@ def parse(token_arr):
 			num = int(table_result[1:])
 			stack.append(num)
 			token_idx += 1
+
+			# append tree node
+			tree_stack.append(Node(token))
 		
 		elif table_result[0] == "r":
 			num = int(table_result[1:])
 			pop_count = len(remove[num][1].split())
 			print(f'Remove #{num} : {remove[num][0]} <= {"ε" if remove[num][1] == "" else remove[num][1]}')
 
-			# index error 발생 가능
+			# combine tree node
+			children = []
 			for _ in range(pop_count):
 				stack.pop()
+				children.append(tree_stack.pop())
+			
+			parent = Node(remove[num][0], children=children[::-1])
+			tree_stack.append(parent)
 
-			# key error 발생 가능
+			# key error
 			goto = parsing_table[stack[-1]][remove[num][0]]
 			if goto == None:
 				raise ValueError("파싱 실패")
 			else:
-				# 숫자라고 가정
+				# assume number
 				stack.append(int(goto))
 
 		elif table_result == "acc":
 			print("Accept!!!")
+			print("Parse Tree: ")
+			# print tree
+			for pre, _, node in RenderTree(tree_stack[0]):
+				print("%s%s" % (pre, node.name))
 			return
 
 		else:
