@@ -86,14 +86,13 @@ def parse(token_arr):
 	stack.append(0)
 	while(1):
 		token = token_arr[token_idx + 1]
-		#print(f'stack : {stack}, token : {token}\n')
-
-		# key error
 		table_result = parsing_table[stack[-1]][token]
 
+		# There is no value in parsing table
 		if table_result == None:
-			raise ValueError("파싱 실패")
+			raise ValueError("[Error] parsing table에 값이 존재하지 않습니다.\n")
 		
+		# Shift
 		elif table_result[0] == "s":
 			num = int(table_result[1:])
 			stack.append(num)
@@ -102,10 +101,10 @@ def parse(token_arr):
 			# append tree node
 			tree_stack.append(Node(token))
 		
+		# Reduce
 		elif table_result[0] == "r":
 			num = int(table_result[1:])
 			pop_count = len(remove[num][1].split())
-			print(f'Remove #{num} : {remove[num][0]} <= {"ε" if remove[num][1] == "" else remove[num][1]}')
 
 			# combine tree node
 			children = []
@@ -116,24 +115,22 @@ def parse(token_arr):
 			parent = Node(remove[num][0], children=children[::-1])
 			tree_stack.append(parent)
 
-			# key error
+			# GOTO
 			goto = parsing_table[stack[-1]][remove[num][0]]
 			if goto == None:
-				raise ValueError("파싱 실패")
+				raise ValueError("[Error] parsing table에 값이 존재하지 않습니다.\n")
 			else:
 				# assume number
 				stack.append(int(goto))
 
+		# Accept
 		elif table_result == "acc":
-			print("Accept!!!")
+			print("Accept!!!\n")
 			print("Parse Tree: ")
 			# print tree
 			for pre, _, node in RenderTree(tree_stack[0]):
 				print("%s%s" % (pre, node.name))
 			return
-
-		else:
-			raise ValueError("WHAT THE HELL")
 
 
 # main
@@ -149,5 +146,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print('\n\n프로그램을 종료합니다.\n')
 	except Exception as e:
-		print(f'[Error] 예상치 못한 에러가 발생했습니다. 에러 메시지 : {e}\n')
+		print(f'Rejected...\n\n{e}')
 		traceback.print_exc()
