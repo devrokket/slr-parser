@@ -1,1 +1,1 @@
-vtype id semi vtype id lparen rparen lbrace if lparen boolstr comp boolstr rparen lbrace rbrace else lbrace rbrace return character semi rbrace
+vtype id semi vtype id assign literal semi vtype id assign character semi vtype id assign boolstr semi vtype id assign lparen id addsub id rparen addsub id multdiv id semi vtype id lparen vtype id comma vtype id comma vtype id rparen lbrace if lparen boolstr comp boolstr rparen lbrace while lparen boolstr rparen lbrace vtype id assign character semi rbrace rbrace else lbrace rbrace return character semi rbrace
