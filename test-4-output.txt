@@ -1,0 +1,15 @@
+$ python slr_parser.py test-4.txt
+입력된 문자열 : vtype id assign id addsub id multdiv lparen id addsub id rparen
+
+Rejected...
+
+[Error] parsing table에 값이 존재하지 않습니다.
+
+Traceback (most recent call last):
+  File "C:\Users\User\Desktop\Cleaning\Programming\python_codes\slr-parser\slr_parser.py", line 145, in <module>
+    main()
+  File "C:\Users\User\Desktop\Cleaning\Programming\python_codes\slr-parser\slr_parser.py", line 139, in main
+    parse(token_arr)
+  File "C:\Users\User\Desktop\Cleaning\Programming\python_codes\slr-parser\slr_parser.py", line 93, in parse
+    raise ValueError("[Error] parsing table에 값이 존재하지 않습니다.\n")
+ValueError: [Error] parsing table에 값이 존재하지 않습니다.

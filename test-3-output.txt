@@ -1,0 +1,53 @@
+$ python slr_parser.py test-3.txt 
+입력된 문자열 : vtype id lparen vtype id rparen lbrace while lparen boolstr comp boolstr comp boolstr comp boolstr rparen lbrace rbrace return id semi rbrace
+
+Accept!!!
+
+Parse Tree:
+CODE
+├── FDECL
+│   ├── vtype
+│   ├── id
+│   ├── lparen
+│   ├── ARG
+│   │   ├── vtype
+│   │   ├── id
+│   │   └── MOREARGS
+│   ├── rparen
+│   ├── lbrace
+│   ├── BLOCK
+│   │   ├── STMT
+│   │   │   ├── while
+│   │   │   ├── lparen
+│   │   │   ├── COND
+│   │   │   │   ├── COND_1
+│   │   │   │   │   └── boolstr
+│   │   │   │   ├── comp
+│   │   │   │   └── COND
+│   │   │   │       ├── COND_1
+│   │   │   │       │   └── boolstr
+│   │   │   │       ├── comp
+│   │   │   │       └── COND
+│   │   │   │           ├── COND_1
+│   │   │   │           │   └── boolstr
+│   │   │   │           ├── comp
+│   │   │   │           └── COND
+│   │   │   │               └── COND_1
+│   │   │   │                   └── boolstr
+│   │   │   ├── rparen
+│   │   │   ├── lbrace
+│   │   │   ├── BLOCK
+│   │   │   └── rbrace
+│   │   └── BLOCK
+│   ├── RETURN
+│   │   ├── return
+│   │   ├── RHS
+│   │   │   └── EXPR
+│   │   │       └── EXPR_1
+│   │   │           └── EXPR_2
+│   │   │               └── id
+│   │   └── semi
+│   └── rbrace
+└── CODE
+
+프로그램 종료.
